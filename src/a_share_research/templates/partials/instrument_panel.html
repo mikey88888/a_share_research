@@ -1,0 +1,125 @@
+<section class="detail-header" data-role="instrument-panel">
+  <div class="detail-title-row">
+    <div>
+      <a class="back-link" href="/">← 返回总览</a>
+      <p class="eyebrow">{{ instrument.symbol }}</p>
+      <h1>{{ instrument.name }}</h1>
+    </div>
+    <div class="header-actions">
+      {% for item in instrument_list %}
+        <a
+          class="button {% if item.symbol == instrument.symbol %}selected{% endif %}"
+          href="/instruments/{{ item.symbol }}?timeframe={{ timeframe }}&range={{ range_key }}"
+          hx-get="/instruments/{{ item.symbol }}?timeframe={{ timeframe }}&range={{ range_key }}"
+          hx-target="#instrument-panel"
+          hx-push-url="true"
+        >
+          {{ item.name }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <section class="toolbar stack">
+    <div class="segmented">
+      {% for key, label in timeframe_options.items() %}
+        <a
+          class="button {% if key == timeframe %}selected{% endif %}"
+          href="/instruments/{{ instrument.symbol }}?timeframe={{ key }}&range={{ default_ranges[key] }}"
+          hx-get="/instruments/{{ instrument.symbol }}?timeframe={{ key }}&range={{ default_ranges[key] }}"
+          hx-target="#instrument-panel"
+          hx-push-url="true"
+        >
+          {{ label }}
+        </a>
+      {% endfor %}
+    </div>
+    <div class="segmented">
+      {% for item in range_options %}
+        <a
+          class="button {% if item == range_key %}selected{% endif %}"
+          href="/instruments/{{ instrument.symbol }}?timeframe={{ timeframe }}&range={{ item }}"
+          hx-get="/instruments/{{ instrument.symbol }}?timeframe={{ timeframe }}&range={{ item }}"
+          hx-target="#instrument-panel"
+          hx-push-url="true"
+        >
+          {{ item }}
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="stats-grid">
+    <article class="stat-card">
+      <span>最新收盘</span>
+      <strong>{{ "%.2f"|format(latest_close) if latest_close is not none else "-" }}</strong>
+    </article>
+    <article class="stat-card">
+      <span>相邻变动</span>
+      <strong class="{% if change_pct and change_pct > 0 %}up{% elif change_pct and change_pct < 0 %}down{% endif %}">
+        {{ "%.2f%%"|format(change_pct) if change_pct is not none else "-" }}
+      </strong>
+    </article>
+    <article class="stat-card">
+      <span>展示区间</span>
+      <strong>{{ start_label or "-" }} → {{ end_label or "-" }}</strong>
+    </article>
+    <article class="stat-card">
+      <span>当前条数</span>
+      <strong>{{ display_count }}</strong>
+    </article>
+    <article class="stat-card">
+      <span>最近同步</span>
+      <strong>{{ latest_sync or "-" }}</strong>
+    </article>
+  </section>
+
+  <section class="chart-card">
+    <div class="chart-card-header">
+      <div>
+        <p class="eyebrow">Chart</p>
+        <h2>{{ instrument.name }} {{ timeframe_label }}</h2>
+      </div>
+      <span class="badge">{{ range_key }}</span>
+    </div>
+    <div class="chart-root" data-role="chart-root"></div>
+    <script type="application/json" data-role="bar-data">{{ chart_bars_json | safe }}</script>
+  </section>
+
+  <section class="table-card">
+    <div class="chart-card-header">
+      <div>
+        <p class="eyebrow">Rows</p>
+        <h2>最近 15 条记录</h2>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th>开盘</th>
+            <th>最高</th>
+            <th>最低</th>
+            <th>收盘</th>
+            <th>成交量</th>
+            <th>成交额</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in table_rows %}
+            <tr>
+              <td>{{ row.trade_date or row.bar_time }}</td>
+              <td>{{ "%.2f"|format(row.open) }}</td>
+              <td>{{ "%.2f"|format(row.high) }}</td>
+              <td>{{ "%.2f"|format(row.low) }}</td>
+              <td>{{ "%.2f"|format(row.close) }}</td>
+              <td>{{ "%.0f"|format(row.volume) if row.volume is not none else "-" }}</td>
+              <td>{{ "%.0f"|format(row.amount) if row.amount is not none else "-" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>

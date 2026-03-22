@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Dashboard</p>
+      <h1>指数研究总览</h1>
+      <p class="muted">直接浏览 PostgreSQL 里的沪深300和中证500，不必先开 notebook。</p>
+    </div>
+  </section>
+
+  <div id="dashboard-content">
+    {% include "partials/index_content.html" %}
+  </div>
+{% endblock %}

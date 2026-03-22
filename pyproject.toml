@@ -1,0 +1,22 @@
+[project]
+name = "a-share-research"
+version = "0.1.0"
+description = "WSL-based A-share quant research workspace"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "akshare>=1.17.0",
+  "fastapi>=0.115.0",
+  "ipykernel>=6.29.0",
+  "jinja2>=3.1.0",
+  "jupyterlab>=4.4.0",
+  "matplotlib>=3.10.0",
+  "numpy>=2.2.0",
+  "pandas>=2.2.0",
+  "psycopg[binary]>=3.2.0",
+  "pyarrow>=19.0.0",
+  "uvicorn[standard]>=0.34.0",
+]
+
+[tool.uv]
+package = true

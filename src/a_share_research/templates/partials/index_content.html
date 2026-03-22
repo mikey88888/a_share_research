@@ -1,0 +1,54 @@
+<section class="toolbar">
+  <div class="toolbar-meta">
+    <span>最新同步时间：</span>
+    <strong>{{ latest_sync_at or "暂无数据" }}</strong>
+  </div>
+  <button
+    class="button primary"
+    hx-post="/actions/refresh"
+    hx-target="#dashboard-content"
+    hx-swap="innerHTML"
+  >
+    手动刷新数据
+  </button>
+</section>
+
+{% if message %}
+  <div class="notice">{{ message }}</div>
+{% endif %}
+
+{% if error %}
+  <div class="notice error">{{ error }}</div>
+{% endif %}
+
+<section class="card-grid">
+  {% for card in cards %}
+    <a class="card" href="{{ card.detail_url }}">
+      <div class="card-header">
+        <div>
+          <p class="card-symbol">{{ card.symbol }}</p>
+          <h2>{{ card.name }}</h2>
+        </div>
+        <span class="badge">{{ card.exchange }}</span>
+      </div>
+      <dl class="metric-list">
+        <div>
+          <dt>日线条数</dt>
+          <dd>{{ card.daily_rows or 0 }}</dd>
+        </div>
+        <div>
+          <dt>60分钟条数</dt>
+          <dd>{{ card.intraday_rows or 0 }}</dd>
+        </div>
+        <div>
+          <dt>最新日线</dt>
+          <dd>{{ card.latest_trade_date or "-" }}</dd>
+        </div>
+        <div>
+          <dt>最新60分钟</dt>
+          <dd>{{ card.latest_bar_time or "-" }}</dd>
+        </div>
+      </dl>
+    </a>
+  {% endfor %}
+</section>
