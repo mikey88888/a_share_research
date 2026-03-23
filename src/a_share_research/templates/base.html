@@ -4,16 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ page_title or "量化研究看板" }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='app.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}" />
     <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
     <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js" defer></script>
-    <script src="{{ url_for('static', path='app.js') }}" defer></script>
+    <script src="{{ url_for('static', path='js/app.js') }}" defer></script>
   </head>
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="/">A-Share Research</a>
-        <p class="tagline">WSL + PostgreSQL + 研究看板</p>
+        <div>
+          <a class="brand" href="/">A-Share Research</a>
+          <p class="tagline">WSL + PostgreSQL + 统一市场研究看板</p>
+        </div>
+        <nav class="site-nav">
+          <a class="nav-link" href="/">总览</a>
+          <a class="nav-link" href="/markets/indexes">指数</a>
+          <a class="nav-link" href="/markets/stocks">个股</a>
+        </nav>
       </div>
     </header>
     <main class="page-shell">

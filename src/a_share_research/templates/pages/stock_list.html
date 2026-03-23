@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Stocks</p>
+      <h1>个股列表与检索</h1>
+      <p class="muted">按代码、名称、市场与最新更新时间筛选 800 只当前成分股，并直接跳到独立研究页。</p>
+    </div>
+  </section>
+
+  <div id="stock-list-panel">
+    {% include "partials/stock_list_panel.html" %}
+  </div>
+{% endblock %}

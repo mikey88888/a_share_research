@@ -6,9 +6,15 @@ PID_FILE="${ROOT_DIR}/.dashboard.pid"
 LOG_FILE="${ROOT_DIR}/.dashboard.log"
 HOST="${A_SHARE_DASHBOARD_HOST:-0.0.0.0}"
 PORT="${A_SHARE_DASHBOARD_PORT:-8000}"
+PYTHON_BIN="${ROOT_DIR}/.venv/bin/python"
 
 if [[ -z "${A_SHARE_PG_DSN:-}" ]]; then
   echo "A_SHARE_PG_DSN is not set"
+  exit 1
+fi
+
+if [[ ! -x "$PYTHON_BIN" ]]; then
+  echo "Python virtualenv not found at $PYTHON_BIN"
   exit 1
 fi
 
@@ -18,7 +24,7 @@ if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
 fi
 
 cd "$ROOT_DIR"
-nohup uv run python -m a_share_research.webapp --host "$HOST" --port "$PORT" >"$LOG_FILE" 2>&1 &
+nohup env PYTHONPATH=src "$PYTHON_BIN" -m a_share_research.webapp --host "$HOST" --port "$PORT" >"$LOG_FILE" 2>&1 &
 echo $! >"$PID_FILE"
 sleep 3
 

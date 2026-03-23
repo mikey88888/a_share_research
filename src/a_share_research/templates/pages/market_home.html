@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="hero hero-market">
+    <div class="hero-copy">
+      <p class="eyebrow">Market Research</p>
+      <h1>统一市场研究入口</h1>
+      <p class="muted">
+        用一个入口浏览指数、检索个股、打开独立 K 线研究页。所有页面都直接读取 PostgreSQL 里的落库数据。
+      </p>
+    </div>
+    <div class="hero-actions">
+      <a class="button primary" href="/markets/stocks">打开个股列表</a>
+      <a class="button" href="/markets/indexes">查看指数研究</a>
+    </div>
+  </section>
+
+  <div id="market-home-content">
+    {% include "partials/market_home_content.html" %}
+  </div>
+{% endblock %}

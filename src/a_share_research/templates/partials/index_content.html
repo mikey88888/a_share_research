@@ -9,9 +9,41 @@
     hx-target="#dashboard-content"
     hx-swap="innerHTML"
   >
-    手动刷新数据
+    手动刷新指数数据
   </button>
 </section>
+
+{% if stock_summary %}
+  <section class="card-grid">
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <p class="card-symbol">STOCK LIBRARY</p>
+          <h2>股票库状态</h2>
+        </div>
+        <span class="badge">800成分股</span>
+      </div>
+      <dl class="metric-list">
+        <div>
+          <dt>股票总数</dt>
+          <dd>{{ stock_summary.stock_count or 0 }}</dd>
+        </div>
+        <div>
+          <dt>日线总条数</dt>
+          <dd>{{ stock_summary.daily_rows or 0 }}</dd>
+        </div>
+        <div>
+          <dt>60分钟总条数</dt>
+          <dd>{{ stock_summary.intraday_rows or 0 }}</dd>
+        </div>
+        <div>
+          <dt>最近同步</dt>
+          <dd>{{ stock_summary.latest_sync_at or "-" }}</dd>
+        </div>
+      </dl>
+    </article>
+  </section>
+{% endif %}
 
 {% if message %}
   <div class="notice">{{ message }}</div>

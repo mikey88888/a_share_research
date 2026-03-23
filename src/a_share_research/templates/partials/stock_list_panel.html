@@ -1,0 +1,95 @@
+<section class="toolbar stack">
+  <form
+    class="filter-form"
+    action="/markets/stocks"
+    method="get"
+    hx-get="/markets/stocks"
+    hx-target="#stock-list-panel"
+    hx-push-url="true"
+  >
+    <label class="field grow">
+      <span>代码 / 名称</span>
+      <input
+        type="search"
+        name="q"
+        value="{{ query_string }}"
+        placeholder="输入股票代码或名称"
+        list="stock-list-suggestions"
+        data-role="stock-search"
+        data-suggestions="stock-list-suggestions"
+      />
+    </label>
+    <datalist id="stock-list-suggestions"></datalist>
+
+    <label class="field">
+      <span>市场</span>
+      <select name="exchange" onchange="this.form.requestSubmit()">
+        {% for option in exchange_options %}
+          <option value="{{ option.value }}" {% if option.value == exchange %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label class="field">
+      <span>排序</span>
+      <select name="sort" onchange="this.form.requestSubmit()">
+        {% for option in sort_options %}
+          <option value="{{ option.value }}" {% if option.value == sort %}selected{% endif %}>{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <input type="hidden" name="page" value="1" />
+    <input type="hidden" name="page_size" value="{{ page_size }}" />
+    <div class="form-actions">
+      <button class="button primary" type="submit">更新列表</button>
+    </div>
+  </form>
+
+  <div class="toolbar-meta">
+    <span>结果：</span>
+    <strong>{{ total }}</strong>
+    <span>只股票，第 {{ page }} / {{ total_pages }} 页</span>
+  </div>
+</section>
+
+{% if items %}
+  <section class="table-card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>代码</th>
+            <th>名称</th>
+            <th>市场</th>
+            <th>所属指数</th>
+            <th>日线条数</th>
+            <th>60分钟条数</th>
+            <th>最新日线</th>
+            <th>最新60分钟</th>
+            <th>最近同步</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in items %}
+            <tr>
+              <td><a class="table-link" href="{{ row.detail_url }}">{{ row.symbol }}</a></td>
+              <td>{{ row.name }}</td>
+              <td>{{ row.exchange }}</td>
+              <td>{{ row.membership_label }}</td>
+              <td>{{ row.daily_rows or 0 }}</td>
+              <td>{{ row.intraday_rows or 0 }}</td>
+              <td>{{ row.latest_trade_date or "-" }}</td>
+              <td>{{ row.latest_bar_time or "-" }}</td>
+              <td>{{ row.latest_sync_at or "-" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% else %}
+  <div class="notice">没有匹配的股票，请调整关键词或筛选条件。</div>
+{% endif %}
+
+{% include "components/pagination.html" %}

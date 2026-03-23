@@ -1,0 +1,157 @@
+<section class="toolbar">
+  <div class="toolbar-meta">
+    <span>最新同步时间：</span>
+    <strong>{{ latest_sync_at or "暂无数据" }}</strong>
+  </div>
+  <button
+    class="button primary"
+    hx-post="/actions/refresh"
+    hx-target="#market-home-content"
+    hx-swap="innerHTML"
+  >
+    手动刷新指数数据
+  </button>
+</section>
+
+{% if message %}
+  <div class="notice">{{ message }}</div>
+{% endif %}
+
+{% if error %}
+  <div class="notice error">{{ error }}</div>
+{% endif %}
+
+<section class="overview-grid">
+  <article class="card summary-card">
+    <div class="card-header">
+      <div>
+        <p class="card-symbol">STOCK LIBRARY</p>
+        <h2>股票库状态</h2>
+      </div>
+      <span class="badge">{{ stock_summary.stock_count or 0 }} 只</span>
+    </div>
+    <dl class="metric-list">
+      <div>
+        <dt>日线总条数</dt>
+        <dd>{{ stock_summary.daily_rows or 0 }}</dd>
+      </div>
+      <div>
+        <dt>60分钟总条数</dt>
+        <dd>{{ stock_summary.intraday_rows or 0 }}</dd>
+      </div>
+      <div>
+        <dt>最近同步</dt>
+        <dd>{{ stock_summary.latest_sync_at or "-" }}</dd>
+      </div>
+    </dl>
+    <div class="card-actions">
+      <a class="button primary" href="/markets/stocks">进入个股浏览器</a>
+    </div>
+  </article>
+
+  <article class="card summary-card">
+    <div class="card-header">
+      <div>
+        <p class="card-symbol">DISCOVERY</p>
+        <h2>个股检索入口</h2>
+      </div>
+      <span class="badge">服务端搜索</span>
+    </div>
+    <form class="filter-form compact" action="/markets/stocks" method="get">
+      <label>
+        <span>代码 / 名称</span>
+        <input
+          type="search"
+          name="q"
+          placeholder="例如 000001 或 平安银行"
+          list="home-stock-suggestions"
+          data-role="stock-search"
+          data-suggestions="home-stock-suggestions"
+        />
+      </label>
+      <datalist id="home-stock-suggestions"></datalist>
+      <div class="form-actions">
+        <button class="button primary" type="submit">检索个股</button>
+      </div>
+    </form>
+  </article>
+</section>
+
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Indexes</p>
+    <h2>指数快捷入口</h2>
+  </div>
+  <a class="button" href="/markets/indexes">查看全部指数页</a>
+</section>
+
+<section class="card-grid">
+  {% for card in index_cards %}
+    <a class="card" href="{{ card.detail_url }}">
+      <div class="card-header">
+        <div>
+          <p class="card-symbol">{{ card.symbol }}</p>
+          <h2>{{ card.name }}</h2>
+        </div>
+        <span class="badge">{{ card.exchange }}</span>
+      </div>
+      <dl class="metric-list">
+        <div>
+          <dt>成分股数量</dt>
+          <dd>{{ card.constituent_count or 0 }}</dd>
+        </div>
+        <div>
+          <dt>日线条数</dt>
+          <dd>{{ card.daily_rows or 0 }}</dd>
+        </div>
+        <div>
+          <dt>60分钟条数</dt>
+          <dd>{{ card.intraday_rows or 0 }}</dd>
+        </div>
+        <div>
+          <dt>最近同步</dt>
+          <dd>{{ card.latest_sync_at or "-" }}</dd>
+        </div>
+      </dl>
+    </a>
+  {% endfor %}
+</section>
+
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Stocks Preview</p>
+    <h2>个股浏览预览</h2>
+  </div>
+  <a class="button" href="/markets/stocks">打开完整列表</a>
+</section>
+
+<section class="table-card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>代码</th>
+          <th>名称</th>
+          <th>市场</th>
+          <th>所属指数</th>
+          <th>日线条数</th>
+          <th>60分钟条数</th>
+          <th>最近60分钟</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in featured_stocks["items"] %}
+          <tr>
+            <td><a class="table-link" href="{{ row.detail_url }}">{{ row.symbol }}</a></td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.exchange }}</td>
+            <td>{{ row.membership_label }}</td>
+            <td>{{ row.daily_rows or 0 }}</td>
+            <td>{{ row.intraday_rows or 0 }}</td>
+            <td>{{ row.latest_bar_time or "-" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>

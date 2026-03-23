@@ -1,0 +1,39 @@
+<section class="toolbar">
+  <div class="toolbar-meta">
+    <span>最新同步时间：</span>
+    <strong>{{ latest_sync_at or "暂无数据" }}</strong>
+  </div>
+  <a class="button" href="/markets/stocks">切到个股浏览</a>
+</section>
+
+<section class="card-grid">
+  {% for card in index_cards %}
+    <a class="card" href="{{ card.detail_url }}">
+      <div class="card-header">
+        <div>
+          <p class="card-symbol">{{ card.symbol }}</p>
+          <h2>{{ card.name }}</h2>
+        </div>
+        <span class="badge">{{ card.exchange }}</span>
+      </div>
+      <dl class="metric-list">
+        <div>
+          <dt>成分股数量</dt>
+          <dd>{{ card.constituent_count or 0 }}</dd>
+        </div>
+        <div>
+          <dt>最新日线</dt>
+          <dd>{{ card.latest_trade_date or "-" }}</dd>
+        </div>
+        <div>
+          <dt>最新60分钟</dt>
+          <dd>{{ card.latest_bar_time or "-" }}</dd>
+        </div>
+        <div>
+          <dt>最近同步</dt>
+          <dd>{{ card.latest_sync_at or "-" }}</dd>
+        </div>
+      </dl>
+    </a>
+  {% endfor %}
+</section>
